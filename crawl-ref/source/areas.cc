@@ -100,13 +100,25 @@ static void _actor_areas(actor *a)
     int r;
 
     if ((r = a->silence_radius()) >= 0)
-    {
-        _agrid_centres.emplace_back(AREA_SILENCE, a->pos(), r);
+	{
+		
+		if (you.species == SP_SKUGGI)
+			{
+				_agrid_centres.emplace_back(AREA_SILENCE, a->pos(), r);
 
-        for (radius_iterator ri(a->pos(), r, C_SQUARE); ri; ++ri)
-            _set_agrid_flag(*ri, areaprop::SILENCE);
-        no_areas = false;
-    }
+				for (radius_iterator ri(a->pos(), r, C_ROUND, true); ri; ++ri)
+				_set_agrid_flag(*ri, areaprop::SILENCE);
+				no_areas = false;
+			}
+		else if (you.species == !SP_SKUGGI)
+			{
+				_agrid_centres.emplace_back(AREA_SILENCE, a->pos(), r);
+
+				for (radius_iterator ri(a->pos(), r, C_SQUARE); ri; ++ri)
+					_set_agrid_flag(*ri, areaprop::SILENCE);
+				no_areas = false;
+			}
+	}
 
     if ((r = a->halo_radius()) >= 0)
     {
@@ -510,6 +522,10 @@ static int _silence_range(int dur)
 
 int player::silence_radius() const
 {
+	if (you.species == SP_SKUGGI)
+	{
+		return 2;
+	}
     return _silence_range(duration[DUR_SILENCE]);
 }
 

@@ -3239,6 +3239,10 @@ bool is_emergency_item(const item_def &item)
         case POT_CURING:
         case POT_RESISTANCE:
         case POT_MAGIC:
+			if (you.species == SP_SKUGGI)
+			{
+				return false;
+			}
             return true;
         default:
             return false;
@@ -3492,6 +3496,12 @@ bool is_useless_item(const item_def &item, bool temp)
             }
             return true;
         }
+		
+		if (you.species == SP_SKUGGI
+			&& get_weapon_brand(item) == SPWPN_ANTIMAGIC)
+			{
+				return true;
+			}
 
         return false;
 
@@ -3639,6 +3649,12 @@ bool is_useless_item(const item_def &item, bool temp)
         case POT_CURE_MUTATION:
         case POT_MUTATION:
         case POT_BENEFICIAL_MUTATION:
+		// Might be redundant, but I want to cover everything
+		case POT_MAGIC:
+			if (you.species == SP_SKUGGI)
+			{
+				return true;
+			}
 #if TAG_MAJOR_VERSION == 34
         case POT_GAIN_STRENGTH:
         case POT_GAIN_INTELLIGENCE:
@@ -3717,7 +3733,8 @@ bool is_useless_item(const item_def &item, bool temp)
                     || (you_worship(GOD_RU) && you.piety == piety_breakpoint(5));
 
         case AMU_GUARDIAN_SPIRIT:
-            return you.spirit_shield(false, false);
+            return (you.species == SP_SKUGGI
+				|| you.spirit_shield(false, false));
 
         case RING_LIFE_PROTECTION:
             return player_prot_life(false, temp, false) == 3;

@@ -3482,6 +3482,7 @@ enum monster_type                      // menv[].type
     MONS_DEEP_ELF_ARCHER,
     MONS_DEMONIC_PLANT,
     MONS_WITHERED_PLANT,
+	MONS_SKUGGI,
 #endif
 
     NUM_MONSTERS,               // used for polymorph
@@ -4172,6 +4173,7 @@ enum species_type
     SP_GARGOYLE,
     SP_FORMICID,
     SP_VINE_STALKER,
+	SP_SKUGGI,
     NUM_SPECIES,
 
     SP_UNKNOWN  = 100,

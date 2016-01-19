@@ -29,6 +29,8 @@ halfling_m HALFLING
 halfling_f
 orc_f ORC
 orc_m
+skuggi_f SKUGGI
+skuggi_m
 %rim 0
 lorc_m0 LAVA_ORC
 lorc_f0

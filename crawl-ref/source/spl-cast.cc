@@ -758,6 +758,12 @@ bool cast_a_spell(bool check_range, spell_type spell)
     }
 
     const int cost = spell_mana(spell);
+	if (!enough_mp(cost, true) && you.species == SP_SKUGGI)
+    {
+        mpr("You don't have enough health to cast that spell.");
+        crawl_state.zero_turns_taken();
+        return false;
+    }
     if (!enough_mp(cost, true))
     {
         mpr("You don't have enough magic to cast that spell.");

@@ -2812,6 +2812,13 @@ static void _gain_and_note_hp_mp()
     const int note_maxmp = get_real_mp(false);
 
     char buf[200];
+	
+	if (you.species == SP_SKUGGI)
+	{
+		// Skuggi don't MP
+		sprintf(buf, "HP: %d/%d",
+				min(you.hp, note_maxhp), note_maxhp);
+	}
 #if TAG_MAJOR_VERSION == 34
     if (you.species == SP_DJINNI)
         // Djinn don't HP/MP
@@ -3860,6 +3867,11 @@ void calc_mp()
         return calc_hp();
     }
 #endif
+	if (you.species == SP_SKUGGI)
+	{
+		you.magic_points = you.max_magic_points = 0;
+		return calc_hp();
+	}
 
     you.max_magic_points = get_real_mp(true);
     you.magic_points = min(you.magic_points, you.max_magic_points);
@@ -3890,7 +3902,9 @@ void dec_mp(int mp_loss, bool silent)
     if (you.species == SP_DJINNI)
         return dec_hp(mp_loss * DJ_MP_RATE, false);
 #endif
-
+	if (you.species == SP_SKUGGI)
+		return dec_hp(mp_loss, false);
+	
     you.magic_points -= mp_loss;
 
     you.magic_points = max(0, you.magic_points);
@@ -3900,8 +3914,12 @@ void dec_mp(int mp_loss, bool silent)
 
 void drain_mp(int loss)
 {
+	if (you.species == SP_SKUGGI)
+	{
+		return;
+	}
 #if TAG_MAJOR_VERSION == 34
-    if (you.species == SP_DJINNI)
+    else if (you.species == SP_DJINNI)
     {
 
         if (loss <= 0)
@@ -3951,8 +3969,12 @@ bool enough_hp(int minimum, bool suppress_msg, bool abort_macros)
 
 bool enough_mp(int minimum, bool suppress_msg, bool abort_macros)
 {
+	if (you.species == SP_SKUGGI)
+	{
+		return enough_hp(minimum, suppress_msg);
+	}
 #if TAG_MAJOR_VERSION == 34
-    if (you.species == SP_DJINNI)
+    else if (you.species == SP_DJINNI)
         return enough_hp(minimum * DJ_MP_RATE, suppress_msg);
 #endif
 
@@ -3960,7 +3982,14 @@ bool enough_mp(int minimum, bool suppress_msg, bool abort_macros)
 
     if (you.magic_points < minimum)
     {
-        if (!suppress_msg)
+        if (!suppress_msg && you.species == SP_SKUGGI)
+		{
+			if (get_real_mp(true) < minimum)
+               mpr("You're not healthy enough.");
+            else
+               mpr("You don't have enough health at the moment.");
+		}
+		else if (!suppress_msg)
         {
             if (get_real_mp(true) < minimum)
                 mpr("You don't have enough magic capacity.");

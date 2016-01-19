@@ -174,6 +174,16 @@ bool can_wield(const item_def *weapon, bool say_reason,
         }
     }
 #endif
+    else if (you.species == SP_SKUGGI
+             && get_weapon_brand(*weapon) == SPWPN_ANTIMAGIC
+            && (item_type_known(*weapon) || !only_known))
+    {
+        if (say_reason)
+        {
+            mpr("This weapon is antimagic, you cannot force yourself to wield it.");
+            id_brand = true;
+        }
+    }
 
     if (id_brand)
     {

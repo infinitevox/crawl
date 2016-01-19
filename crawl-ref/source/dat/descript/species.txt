@@ -111,6 +111,10 @@ Spriggan
 Very small, very frail and very fast, Spriggans make highly competent stabbers
 and spellcasters.
 %%%%
+Skuggi
+
+Beings suffused with magic. Skuggi cast spells using their lifeforce, and emit an aura of silence.
+%%%%
 Troll
 
 Trolls are large brutes with powerful claws, always hungering for raw meat.
